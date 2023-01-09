@@ -1,6 +1,9 @@
 import os
 import re
 import string
+import subprocess
+import wave
+import scipy.io.wavfile as wavfile
 
 SRC_FOLDER = os.path.join(
     os.path.expanduser("~"),
@@ -9,6 +12,9 @@ SRC_FOLDER = os.path.join(
 DEST_FOLDER = os.path.join(
     os.path.expanduser("~"), "Documents", "m8 samples"
 )
+
+FFMPEG_PATH = os.path.join("c:\\", "ffmpeg", "bin", "ffmpeg.exe")
+TARGET_BIT_DEPTH = 16
 
 FILE_TYPES = ["wav"]
 PUNCTUATION = ["_", " ", "-", "+"]
@@ -97,13 +103,77 @@ def capitalize(word):
         word = word[0].upper() + word[1:]
     return word
 
+def describe_wav_file_scipy(path):
+    try:
+        # Read the WAV file
+        rate, data = wavfile.read(path)
+
+        # Get the number of channels in the file
+        num_channels = data.shape[1]
+        if num_channels == 1:
+            channel_str = 'mono'
+        elif num_channels == 2:
+            channel_str = 'stereo'
+        else:
+            channel_str = 'unknown'
+
+        # Get the bit rate and bit depth of the file
+        bit_rate = rate
+        bit_depth = data.dtype.itemsize * 8
+
+        # Print a description of the file
+        print(f'The WAV file is {channel_str}, has a bit rate of {bit_rate}, and a bit depth of {bit_depth}')
+    except:
+        print("error!")
+
+def describe_wav_file_wave(path):
+    try:
+        # Open the WAV file
+        with wave.open(path, 'rb') as f:
+            # Get the number of channels in the file
+            num_channels = f.getnchannels()
+            if num_channels == 1:
+                channel_str = 'mono'
+            elif num_channels == 2:
+                channel_str = 'stereo'
+            else:
+                channel_str = 'unknown'
+
+            # Get the bit rate and depth of the file
+            bit_rate = f.getframerate()
+            #bit_depth = f.getsampwidth() * 8
+
+            # Print a description of the file
+            #print(f'The WAV file is {channel_str}, has a bit rate of {bit_rate}, and a bit depth of {bit_depth}')
+    except:
+        print("error!")
+
+def convert_wav_to_16bit(ffmpeg_path, input_path, output_path, skip_existing=True):
+    # Check if the destination file already exists and skip the conversion if requested
+    if skip_existing and os.path.exists(output_path):
+        return
+
+    # Create the directories in the output path if they do not exist
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    # Construct the FFmpeg command
+    command = [ffmpeg_path, '-hide_banner', '-loglevel', 'error', '-y', '-i', input_path, '-acodec', 'pcm_s16le', output_path]
+
+    try:
+        # Run the FFmpeg command
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        print("error converting!")
 
 def main():
-    for file in get_files_by_type(SRC_FOLDER, file_types=FILE_TYPES):
-        full_path = file
-        relative_path = strip_path_prefix(full_path, SRC_FOLDER)
-
+    for src_path in get_files_by_type(SRC_FOLDER, file_types=FILE_TYPES):
+        relative_path = strip_path_prefix(src_path, SRC_FOLDER)
         short_path = shorten_path(relative_path)
-        print(short_path)
+        dest_path = os.path.join(DEST_FOLDER, short_path)
+
+        print(src_path)
+        convert_wav_to_16bit(FFMPEG_PATH, src_path, dest_path)
+        print(dest_path)
+        print()
 
 main()
