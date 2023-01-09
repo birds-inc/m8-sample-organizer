@@ -2,10 +2,14 @@ import os
 import re
 import string
 
-FOLDER = os.path.join(
+SRC_FOLDER = os.path.join(
     os.path.expanduser("~"),
     "Documents", "Splice", "Samples", "packs"
 )
+DEST_FOLDER = os.path.join(
+    os.path.expanduser("~"), "Documents", "m8 samples"
+)
+
 FILE_TYPES = ["wav"]
 PUNCTUATION = ["_", " ", "-", "+"]
 
@@ -63,22 +67,41 @@ def shorten_path(path):
         # Add the remaining words to the set of unique words
         unique_words.update(words)
 
+        # Flip the plurals and add those to our set of unique words
+        flipped_plurals = []
+        for word in words:
+            if word.endswith('s'):
+                flipped_plurals.append(word[:-1])
+            else:
+                flipped_plurals.append(word + 's')
+        unique_words.update(flipped_plurals)
+
+        # Capitalize all words
+        words = [capitalize(word) for word in words]
+
         # Join the words back together and update the part
         parts[i] = "".join(words)
 
     # Modify the filename
-    parts[-1] = parts[-1].replace(" ", "")
+    words = parts[-1].split()
+    words = [capitalize(word) for word in words]
+    parts[-1] = "".join(words)
 
     # Join the parts back together
     path = os.sep.join([part for part in parts if part])
 
     return path
 
+def capitalize(word):
+    if word[0].islower():
+        word = word[0].upper() + word[1:]
+    return word
+
+
 def main():
-    for file in get_files_by_type(FOLDER, file_types=FILE_TYPES):
+    for file in get_files_by_type(SRC_FOLDER, file_types=FILE_TYPES):
         full_path = file
-        relative_path = strip_path_prefix(full_path, FOLDER)
-        #print(relative_path)
+        relative_path = strip_path_prefix(full_path, SRC_FOLDER)
 
         short_path = shorten_path(relative_path)
         print(short_path)
