@@ -144,7 +144,7 @@ def describe_wav_file_wave(path):
             #bit_depth = f.getsampwidth() * 8
 
             # Print a description of the file
-            #print(f'The WAV file is {channel_str}, has a bit rate of {bit_rate}, and a bit depth of {bit_depth}')
+            print(f'The WAV file is {channel_str}, has a bit rate of {bit_rate}, and a bit depth of {bit_depth}')
     except:
         print("error!")
 
@@ -161,19 +161,21 @@ def convert_wav_to_16bit(ffmpeg_path, input_path, output_path, skip_existing=Tru
 
     try:
         # Run the FFmpeg command
+        print ("Converting {}".format(output_path))
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
         print("error converting!")
 
 def main():
-    for src_path in get_files_by_type(SRC_FOLDER, file_types=FILE_TYPES):
+    files = get_files_by_type(SRC_FOLDER, file_types=FILE_TYPES)
+
+    for src_path in files:
         relative_path = strip_path_prefix(src_path, SRC_FOLDER)
         short_path = shorten_path(relative_path)
         dest_path = os.path.join(DEST_FOLDER, short_path)
 
-        print(src_path)
         convert_wav_to_16bit(FFMPEG_PATH, src_path, dest_path)
-        print(dest_path)
-        print()
+
+    print("{} files processed.".format(len(files)))
 
 main()
