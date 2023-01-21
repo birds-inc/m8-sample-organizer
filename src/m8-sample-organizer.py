@@ -17,7 +17,7 @@ FFMPEG_PATH = os.path.join("c:\\", "ffmpeg", "bin", "ffmpeg.exe")
 TARGET_BIT_DEPTH = 16
 
 FILE_TYPES = ["wav"]
-PUNCTUATION = ["_", " ", "-", "+"]
+PUNCTUATION = ["_", " ", "-", "+", ",", "(", ")", "'"]
 
 def get_files_by_type(folder, file_types=None):
     # Initialize an empty list to store the file paths
@@ -86,12 +86,13 @@ def shorten_path(path):
         words = [capitalize(word) for word in words]
 
         # Join the words back together and update the part
-        parts[i] = "".join(words)
+        parts[i] = "-".join(words)
 
     # Modify the filename
     words = parts[-1].split()
+    extension = words[-1]
     words = [capitalize(word) for word in words]
-    parts[-1] = "".join(words)
+    parts[-1] = "-".join(words[:-1]) + extension
 
     # Join the parts back together
     path = os.sep.join([part for part in parts if part])
@@ -102,51 +103,6 @@ def capitalize(word):
     if word[0].islower():
         word = word[0].upper() + word[1:]
     return word
-
-def describe_wav_file_scipy(path):
-    try:
-        # Read the WAV file
-        rate, data = wavfile.read(path)
-
-        # Get the number of channels in the file
-        num_channels = data.shape[1]
-        if num_channels == 1:
-            channel_str = 'mono'
-        elif num_channels == 2:
-            channel_str = 'stereo'
-        else:
-            channel_str = 'unknown'
-
-        # Get the bit rate and bit depth of the file
-        bit_rate = rate
-        bit_depth = data.dtype.itemsize * 8
-
-        # Print a description of the file
-        print(f'The WAV file is {channel_str}, has a bit rate of {bit_rate}, and a bit depth of {bit_depth}')
-    except:
-        print("error!")
-
-def describe_wav_file_wave(path):
-    try:
-        # Open the WAV file
-        with wave.open(path, 'rb') as f:
-            # Get the number of channels in the file
-            num_channels = f.getnchannels()
-            if num_channels == 1:
-                channel_str = 'mono'
-            elif num_channels == 2:
-                channel_str = 'stereo'
-            else:
-                channel_str = 'unknown'
-
-            # Get the bit rate and depth of the file
-            bit_rate = f.getframerate()
-            #bit_depth = f.getsampwidth() * 8
-
-            # Print a description of the file
-            print(f'The WAV file is {channel_str}, has a bit rate of {bit_rate}, and a bit depth of {bit_depth}')
-    except:
-        print("error!")
 
 def convert_wav_to_16bit(ffmpeg_path, input_path, output_path, skip_existing=True):
     # Check if the destination file already exists and skip the conversion if requested
@@ -161,7 +117,9 @@ def convert_wav_to_16bit(ffmpeg_path, input_path, output_path, skip_existing=Tru
 
     try:
         # Run the FFmpeg command
-        print ("Converting {}".format(output_path))
+        print("Input  {}".format(input_path))
+        print("Output {}".format(output_path))
+        print()
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
         print("error converting!")
