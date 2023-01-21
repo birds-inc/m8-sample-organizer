@@ -17,7 +17,10 @@ FFMPEG_PATH = os.path.join("c:\\", "ffmpeg", "bin", "ffmpeg.exe")
 TARGET_BIT_DEPTH = 16
 
 FILE_TYPES = ["wav"]
-PUNCTUATION = ["_", " ", "-", "+", ",", "(", ")", "'", "#"]
+SPLIT_PUNCTUATION = ["_", " ", "-", "+"]
+FILL_PUNCTUATION = [",", "(", ")", "'", "#"]
+STRIKE_WORDS = ["sample", "label", "process", "edit", "pack", "wav", "construct", "cpa"]
+JOIN_SEP = "_"
 
 def get_files_by_type(folder, file_types=None):
     # Initialize an empty list to store the file paths
@@ -53,8 +56,11 @@ def strip_path_prefix(path, prefix):
 
 def shorten_path(path):
     # Clean up the punctuation
-    for c in PUNCTUATION:
+    for c in SPLIT_PUNCTUATION:
         path = path.replace(c, " ")
+
+    for c in FILL_PUNCTUATION:
+        path = path.replace(c, "")
 
     # Split the path into a list of parts (i.e., folders)
     parts = path.split(os.sep)
@@ -71,7 +77,8 @@ def shorten_path(path):
     file = clean_file(file, unique_words)
     
     # Join the parts back together
-    path = os.sep.join([pack, path, file])
+    parts = [pack, path, file]
+    path = os.sep.join([part for part in parts if part])
 
     return path
 
@@ -82,7 +89,7 @@ def clean_folder(folder, unique_words):
     
     words = [capitalize(word) for word in words]
 
-    pack = "_".join(words)
+    pack = JOIN_SEP.join(words)
 
     return pack
     
@@ -90,7 +97,9 @@ def clean_path(path, unique_words):
     for i, folder in enumerate(path):
         path[i] = clean_folder(folder, unique_words)
 
-    return "-".join(path)
+    path = [folder for folder in path if folder]
+
+    return JOIN_SEP.join(path)
 
 def clean_file(file, unique_words):
     words = file.split()
@@ -99,7 +108,7 @@ def clean_file(file, unique_words):
 
     words = [capitalize(word) for word in words]
 
-    file = "_".join(words[:-1]) + extension
+    file = JOIN_SEP.join(words[:-1]) + extension
     
     return file
 
@@ -107,16 +116,20 @@ def remove_dupe_words(words, unique_words):
     # Remove duplicate words
     words = [word for word in words if word.lower() not in unique_words]
 
+    # Remove any strike words
+    words = [word for word in words if not any(word.lower().startswith(prefix) for prefix in STRIKE_WORDS)]
+
     # Add the remaining words to the set of unique words
-    unique_words.update([word.lower() for word in words])
+    unique_words.update([word.lower() for word in words if not word.isdigit()])
 
     # Flip the plurals and add those to our set of unique words
     flipped_plurals = []
     for word in words:
-        if word.endswith('s'):
-            flipped_plurals.append(word[:-1])
-        else:
-            flipped_plurals.append(word + 's')
+        if not word.isdigit():
+            if word.endswith('s'):
+                flipped_plurals.append(word[:-1])
+            else:
+                flipped_plurals.append(word + 's')
 
     unique_words.update([word.lower() for word in flipped_plurals])
 
