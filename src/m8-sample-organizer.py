@@ -17,7 +17,7 @@ FFMPEG_PATH = os.path.join("c:\\", "ffmpeg", "bin", "ffmpeg.exe")
 TARGET_BIT_DEPTH = 16
 
 FILE_TYPES = ["wav"]
-PUNCTUATION = ["_", " ", "-", "+", ",", "(", ")", "'"]
+PUNCTUATION = ["_", " ", "-", "+", ",", "(", ")", "'", "#"]
 
 def get_files_by_type(folder, file_types=None):
     # Initialize an empty list to store the file paths
@@ -59,45 +59,68 @@ def shorten_path(path):
     # Split the path into a list of parts (i.e., folders)
     parts = path.split(os.sep)
 
+    pack = parts[0]
+    path = parts[1:-1]
+    file = parts[-1]
+
     # Create a set to store the unique words
     unique_words = set()
 
-    # Apply the function to each part
-    for i, part in enumerate(parts[:-1]):
-        # Split the part into words
-        words = part.split()
-
-        # Remove duplicate words
-        words = [word for word in words if word not in unique_words]
-
-        # Add the remaining words to the set of unique words
-        unique_words.update(words)
-
-        # Flip the plurals and add those to our set of unique words
-        flipped_plurals = []
-        for word in words:
-            if word.endswith('s'):
-                flipped_plurals.append(word[:-1])
-            else:
-                flipped_plurals.append(word + 's')
-        unique_words.update(flipped_plurals)
-
-        # Capitalize all words
-        words = [capitalize(word) for word in words]
-
-        # Join the words back together and update the part
-        parts[i] = "-".join(words)
-
-    # Modify the filename
-    words = parts[-1].split()
-    extension = words[-1]
-    words = [capitalize(word) for word in words]
-    parts[-1] = "-".join(words[:-1]) + extension
-
+    pack = clean_folder(pack, unique_words)
+    path = clean_path(path, unique_words)
+    file = clean_file(file, unique_words)
+    
     # Join the parts back together
-    path = os.sep.join([part for part in parts if part])
+    path = os.sep.join([pack, path, file])
 
     return path
+
+def clean_folder(folder, unique_words):
+    words = folder.split()
+
+    words = remove_dupe_words(words, unique_words)
+    
+    words = [capitalize(word) for word in words]
+
+    pack = "_".join(words)
+
+    return pack
+    
+def clean_path(path, unique_words):
+    for i, folder in enumerate(path):
+        path[i] = clean_folder(folder, unique_words)
+
+    return "-".join(path)
+
+def clean_file(file, unique_words):
+    words = file.split()
+
+    extension = words[-1].lower()
+
+    words = [capitalize(word) for word in words]
+
+    file = "_".join(words[:-1]) + extension
+    
+    return file
+
+def remove_dupe_words(words, unique_words):
+    # Remove duplicate words
+    words = [word for word in words if word.lower() not in unique_words]
+
+    # Add the remaining words to the set of unique words
+    unique_words.update([word.lower() for word in words])
+
+    # Flip the plurals and add those to our set of unique words
+    flipped_plurals = []
+    for word in words:
+        if word.endswith('s'):
+            flipped_plurals.append(word[:-1])
+        else:
+            flipped_plurals.append(word + 's')
+
+    unique_words.update([word.lower() for word in flipped_plurals])
+
+    return words
 
 def capitalize(word):
     if word[0].islower():
