@@ -16,11 +16,11 @@ But if you've ever tried loading your sample library on the M8's SD card, you'll
 
 For example, let's say your library includes this path:
 
-* `Capsun - Lo-Fi Soul & Future Beats` / `CPA_CAPSUN_Lo_Fi_Soul___Future_Beats` / `Drums___Percussion` / `Drum___Perc_One_Shots` / `Snare` / `CLF_Snare_Chunk.wav`
+`Capsun - Lo-Fi Soul & Future Beats` / `CPA_CAPSUN_Lo_Fi_Soul___Future_Beats` / `Drums___Percussion` / `Drum___Perc_One_Shots` / `Snare` / `CLF_Snare_Chunk.wav`
 
 This would be shorted and simplified to:
 
-* `Capsun_Lo_Fi_Soul_&_Future_Beats` / `Drums_Percussion_Perc_One_Shots_Snare` / `CLF_Snare_Chunk.wav`
+`Capsun_Lo_Fi_Soul_&_Future_Beats` / `Drums_Percussion_Perc_One_Shots_Snare` / `CLF_Snare_Chunk.wav`
 
 All the duplicate words have been removed, layers of folders collapsed to one level, and excess punctuation and filler words removed!
 
@@ -32,11 +32,11 @@ This is a command-line tool, so you'll need to open a Terminal or cmd.exe shell 
 
 Python is pre-installed on most computers - try the command `python --version` or `python3 --version` to see if it exists.
 
-Otherwise, you can install it from [Python](https://www.python.org/downloads/).  Note the installation path for later reference.
+Otherwise, you can install it from [Python.org](https://www.python.org/downloads/).  Note the installation path for later reference.
 
 ## Install FFmpeg
 
-[FFmpeg](https://ffmpeg.org/download.html) is a free, open-sourced tool used to correctly convert and format audio files for use on the M8.
+[FFmpeg](https://ffmpeg.org/download.html) is a free, industry-standard tool used to convert and format audio files for use on the M8.
 
 Note the installation path for later reference.
 
@@ -48,8 +48,14 @@ Note the installation path for later reference.
 
 In the M8 Sample Organizer folder, there's a file called `config.yml-sample`.  Rename this file to `config.yml`.
 
-Then edit the file a
+Then edit the file accordingly - change the path to your sample library and FFmpeg, and configure any additional cleanup settings to your liking.
 
-1. install ffmpeg
-1. modify constants
-1. run `make local`
+## Run the tool
+
+Finally, run the following command:
+
+`python src/m8-sample-organizer.py`
+
+You'll see as it begins to copy and convert your sample library.
+
+By default, any existing files will be ignored, so this tool is safe to rerun as you add more samples to your library.
