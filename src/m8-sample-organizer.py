@@ -4,23 +4,24 @@ import string
 import subprocess
 import wave
 import scipy.io.wavfile as wavfile
+import yaml
 
-SRC_FOLDER = os.path.join(
-    os.path.expanduser("~"),
-    "Documents", "Splice", "Samples", "packs"
-)
-DEST_FOLDER = os.path.join(
-    os.path.expanduser("~"), "Documents", "m8 samples"
-)
 
-FFMPEG_PATH = os.path.join("c:\\", "ffmpeg", "bin", "ffmpeg.exe")
-TARGET_BIT_DEPTH = 16
+with open("config.yml", "r") as f:
+    config = yaml.safe_load(f)
 
-FILE_TYPES = ["wav"]
-SPLIT_PUNCTUATION = ["_", " ", "-", "+"]
-FILL_PUNCTUATION = [",", "(", ")", "'", "#"]
-STRIKE_WORDS = ["sample", "label", "process", "edit", "pack", "wav", "construct", "cpa"]
-JOIN_SEP = "_"
+
+SRC_FOLDER = config["SRC_FOLDER"]
+DEST_FOLDER = config["DEST_FOLDER"]
+FFMPEG_PATH = config["FFMPEG_PATH"]
+TARGET_BIT_DEPTH = config["TARGET_BIT_DEPTH"]
+FILE_TYPES = config["FILE_TYPES"]
+SPLIT_PUNCTUATION = config["SPLIT_PUNCTUATION"]
+FILL_PUNCTUATION = config["FILL_PUNCTUATION"]
+STRIKE_WORDS = config["STRIKE_WORDS"]
+JOIN_SEP = config["JOIN_SEP"]
+SKIP_EXISTING = config["SKIP_EXISTING"]
+
 
 def get_files_by_type(folder, file_types=None):
     # Initialize an empty list to store the file paths
@@ -140,11 +141,7 @@ def capitalize(word):
         word = word[0].upper() + word[1:]
     return word
 
-def convert_wav_to_16bit(ffmpeg_path, input_path, output_path, skip_existing=True):
-    # Check if the destination file already exists and skip the conversion if requested
-    if skip_existing and os.path.exists(output_path):
-        return
-
+def convert_wav_to_16bit(ffmpeg_path, input_path, output_path):
     # Create the directories in the output path if they do not exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
@@ -152,10 +149,6 @@ def convert_wav_to_16bit(ffmpeg_path, input_path, output_path, skip_existing=Tru
     command = [ffmpeg_path, '-hide_banner', '-loglevel', 'error', '-y', '-i', input_path, '-acodec', 'pcm_s16le', output_path]
 
     try:
-        # Run the FFmpeg command
-        print("Input  {}".format(input_path))
-        print("Output {}".format(output_path))
-        print()
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
         print("error converting!")
@@ -167,6 +160,13 @@ def main():
         relative_path = strip_path_prefix(src_path, SRC_FOLDER)
         short_path = shorten_path(relative_path)
         dest_path = os.path.join(DEST_FOLDER, short_path)
+
+        if SKIP_EXISTING and os.path.exists(dest_path):
+            continue
+
+        print("Input  {}".format(short_path))
+        print("Output {}".format(dest_path))
+        print()
 
         convert_wav_to_16bit(FFMPEG_PATH, src_path, dest_path)
 

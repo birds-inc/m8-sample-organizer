@@ -1,0 +1,71 @@
+### M8 Sample Organizer
+###
+### Lines that start with # are comments!
+
+###
+### BASIC CONFIG
+###
+
+### Path to your source and destination folders
+SRC_FOLDER: "/Users/YOUR_USERNAME/Samples"
+DEST_FOLDER: "/Users/YOUR_USERNAME/M8 Samples"
+
+# For Windows, comment out the above lines and uncomment these
+#SRC_FOLDER: "C:\Users\YOUR_USERNAME\Documents\Samples"
+#DEST_FOLDER: "C:\Users\YOUR_USERNAME\Documents\M8 Samples"
+
+### Set the path to FFMPEG
+FFMPEG_PATH: "\usr\local\bin\ffmpeg"
+
+# For Windows, comment out the above lines and uncomment these
+#FFMPEG_PATH: "C:\ffmpeg\bin\ffmpeg.exe"
+
+###
+### PATH CLEANUP CONFIG
+###
+
+# Words that start with a "strike word" are removed from the path.
+# Use this to remove common folder names like "processed", "final edit", etc.
+STRIKE_WORDS:
+- final
+- sample
+- label
+- process
+- edit
+- pack
+- wav
+- construct
+- cpa
+
+# "Split punctuation" is used to separate words.
+SPLIT_PUNCTUATION:
+- "_"
+- " "
+- "-"
+- "+"
+
+# "Fill punctuation" is removed.
+FILL_PUNCTUATION:
+- ","
+- "("
+- ")"
+- "'"
+- "#"
+
+# This character is used to separate words in the final path (e.g. "Some_Pack_Name")
+JOIN_SEP: "_"
+
+
+###
+### AUDIO CONFIG
+###
+
+# The list of audio file types to be formatted
+FILE_TYPES:
+- wav
+
+# The bit depth used for the processed audio file (16 bit recommended for the M8)
+TARGET_BIT_DEPTH: 16
+
+# Whether or not to reprocess audio files every time - useful if you've changed bit rate
+SKIP_EXISTING: true
