@@ -36,6 +36,8 @@ STRIKE_WORDS:
 - wav
 - construct
 - cpa
+- splice
+- export
 
 # "Split punctuation" is used to separate words.
 SPLIT_PUNCTUATION:
