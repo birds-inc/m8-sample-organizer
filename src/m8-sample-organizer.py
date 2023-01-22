@@ -103,13 +103,17 @@ def clean_path(path, unique_words):
     return JOIN_SEP.join(path)
 
 def clean_file(file, unique_words):
-    words = file.split()
+    parts = file.split(".")
 
-    extension = words[-1].lower()
+    extension = parts[-1]
+
+    filename = " ".join(parts)
+
+    words = filename.split()
 
     words = [capitalize(word) for word in words]
 
-    file = JOIN_SEP.join(words[:-1]) + extension
+    file = JOIN_SEP.join(words[:-1]) + "." + extension
     
     return file
 
@@ -121,16 +125,15 @@ def remove_dupe_words(words, unique_words):
     words = [word for word in words if not any(word.lower().startswith(prefix) for prefix in STRIKE_WORDS)]
 
     # Add the remaining words to the set of unique words
-    unique_words.update([word.lower() for word in words if not word.isdigit()])
+    unique_words.update([word.lower() for word in words])
 
     # Flip the plurals and add those to our set of unique words
     flipped_plurals = []
     for word in words:
-        if not word.isdigit():
-            if word.endswith('s'):
-                flipped_plurals.append(word[:-1])
-            else:
-                flipped_plurals.append(word + 's')
+        if word.endswith('s'):
+            flipped_plurals.append(word[:-1])
+        else:
+            flipped_plurals.append(word + 's')
 
     unique_words.update([word.lower() for word in flipped_plurals])
 
@@ -164,8 +167,8 @@ def main():
         if SKIP_EXISTING and os.path.exists(dest_path):
             continue
 
-        print("Input  {}".format(short_path))
-        print("Output {}".format(dest_path))
+        print("Input  {}".format(relative_path))
+        print("Output {}".format(short_path))
         print()
 
         convert_wav_to_16bit(FFMPEG_PATH, src_path, dest_path)
