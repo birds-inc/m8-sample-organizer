@@ -1,28 +1,27 @@
 # M8 Sample Organizer
 
-The [M8 is a portable tracker sequencer and synthesizer](https://dirtywave.com/), with rich sample support.
+The [M8 is a portable tracker sequencer and synthesizer](https://dirtywave.com/) with rich sample support.
 
-But if you've ever tried loading your sample library on the M8's SD card, you'll notice there are several problems:
+If you've ever tried loading your sample library on the M8's SD card, you'll notice there are several problems:
 
 * Many samples **don't load or play correctly**
 * Folder and file names are **too long**
 * **Navigating** layers of folders is tedious
 
-**M8 Sample Organizer** fixes this!  Just point it at your sample library and specify a destination folder, and it will:
-
-* **Clean up and shorten** long folder and filenames
-* **Convert** your audio files into M8-approved 16-bit WAV files
-* **Detect** and copy new files over as they're added to your library
-
-For example, let's say your library includes this path:
+**M8 Sample Organizer** cleans it up!  It turns samples like this:
 
 `Capsun - Lo-Fi Soul & Future Beats` / `CPA_CAPSUN_Lo_Fi_Soul___Future_Beats` / `Drums___Percussion` / `Drum___Perc_One_Shots` / `Snare` / `CLF_Snare_Chunk.wav`
 
-This would be shorted and simplified to:
+into:
 
 `Capsun_Lo_Fi_Soul_&_Future_Beats` / `Drums_Percussion_Perc_One_Shots_Snare` / `CLF_Snare_Chunk.wav`
 
-All the duplicate words have been removed, layers of folders collapsed to one level, and excess punctuation and filler words removed!
+It does lots of cleanup:
+
+* **Converts** audio files to M8-approved 16-bit WAV files
+* **Removes** duplicate words, punctuation and common filler phrases (like `processed` and `final`)
+* **Simplifies** layers of folders into one level
+* **Detects** new files added to your library each time you run it
 
 # Instructions
 
