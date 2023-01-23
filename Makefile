@@ -1,2 +1,2 @@
 local:
-	python src/m8-sample-organizer.py
+	python3 src/m8-sample-organizer.py
