@@ -66,13 +66,15 @@ You can also configure any additional cleanup settings to your liking, add new s
 
 We need a Python library for reading the configuration file - install it by running this command:
 
-`python -m pip install pyyaml`
+`python3 -m pip install pyyaml`
+
+(If `python3` fails, try just `python` instead.)
 
 ## Run the tool
 
 Finally, navigate to the `m8-sample-organizer-main` folder and run the following command:
 
-`python src/m8-sample-organizer.py`
+`python3 src/m8-sample-organizer.py`
 
 That's it!  You'll see as it begins to copy and convert your sample library.
 
