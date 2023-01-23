@@ -60,7 +60,13 @@ In the M8 Sample Organizer folder, there's a file called `config.yml-sample`.  R
 
 Then edit the `SRC_FOLDER`, `DEST_FOLDER`, and `FFMPEG_PATH` to point at your audio library and FFmpeg.  `DEST_FOLDER` is where this tool will create files, so be sure to set it someplace safe!
 
-You can also configure any additional cleanup settings to your liking - 
+You can also configure any additional cleanup settings to your liking, add new strike words, etc.
+
+## Install yaml
+
+We need a Python library for reading the configuration file - install it by running this command:
+
+`python -m pip install pyyaml`
 
 ## Run the tool
 
