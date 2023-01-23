@@ -1,20 +1,31 @@
+**[Click here to download!](https://github.com/birds-inc/m8-sample-organizer/archive/refs/heads/main.zip)**
+
+This is a Python script to organize and convert your samples for the M8 tracker.  You'll run this tool on the [command-line](https://youtu.be/I4EWvMFj37g) - instructions below!
+
 # M8 Sample Organizer
 
-The [M8 is a portable tracker sequencer and synthesizer](https://dirtywave.com/) with rich sample support.
+The [M8 is a delightful, gameboy-shaped sampler, sequencer and synthesizer](https://dirtywave.com/).
 
-If you've ever tried loading your sample library on the M8's SD card, you'll notice there are several problems:
+But if you've ever tried loading your sample library on it, you've probably run into problems:
 
 * Many samples **don't load or play correctly**
 * Folder and file names are **too long**
 * **Navigating** layers of folders is tedious
 
-**M8 Sample Organizer** cleans it up!  It turns samples like this:
+**M8 Sample Organizer** cleans it up!  It turns samples from your library like this:
 
-`Capsun - Lo-Fi Soul & Future Beats` / `CPA_CAPSUN_Lo_Fi_Soul___Future_Beats` / `Drums___Percussion` / `Drum___Perc_One_Shots` / `Snare` / `CLF_Snare_Chunk.wav`
+* `Capsun - Lo-Fi Soul & Future Beats`
+* / `CPA_CAPSUN_Lo_Fi_Soul___Future_Beats`
+* / `Drums___Percussion`
+* / `Drum___Perc_One_Shots`
+* / `Snare`
+* / `CLF_Snare_Chunk.wav`
 
 into:
 
-`Capsun_Lo_Fi_Soul_&_Future_Beats` / `Drums_Percussion_Perc_One_Shots_Snare` / `CLF_Snare_Chunk.wav`
+* `Capsun_Lo_Fi_Soul_&_Future_Beats`
+* / `Drums_Percussion_Perc_One_Shots_Snare`
+* / `CLF_Snare_Chunk.wav`
 
 It does lots of cleanup:
 
@@ -41,20 +52,22 @@ Note the installation path for later reference.
 
 ## Download the M8 Sample Organizer
 
-[Click here](https://github.com/birds-inc/m8-sample-organizer/archive/refs/heads/main.zip) to download the **M8 Sample Organizer** code.  Unzip the contents.
+**[Click here](https://github.com/birds-inc/m8-sample-organizer/archive/refs/heads/main.zip)** to download the **M8 Sample Organizer** code.  Unzip the contents.
 
 ## Set up the config file
 
 In the M8 Sample Organizer folder, there's a file called `config.yml-sample`.  Rename this file to `config.yml`.
 
-Then edit the file accordingly - change the path to your sample library and FFmpeg, and configure any additional cleanup settings to your liking.
+Then edit the `SRC_FOLDER`, `DEST_FOLDER`, and `FFMPEG_PATH` to point at your audio library and FFmpeg.  `DEST_FOLDER` is where this tool will create files, so be sure to set it someplace safe!
+
+You can also configure any additional cleanup settings to your liking - 
 
 ## Run the tool
 
-Finally, run the following command:
+Finally, navigate to the `m8-sample-organizer-main` folder and run the following command:
 
 `python src/m8-sample-organizer.py`
 
-You'll see as it begins to copy and convert your sample library.
+That's it!  You'll see as it begins to copy and convert your sample library.
 
-By default, any existing files will be ignored, so this tool is safe to rerun as you add more samples to your library.
+As you add more samples to your library, you can rerun this tool - by default, any existing files will be ignored, so only new ones will be processed.
