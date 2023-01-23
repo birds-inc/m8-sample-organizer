@@ -2,8 +2,6 @@ import os
 import re
 import string
 import subprocess
-import wave
-import scipy.io.wavfile as wavfile
 import yaml
 
 
