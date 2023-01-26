@@ -11,8 +11,8 @@ SRC_FOLDER: "/Users/YOUR_USERNAME/Samples"
 DEST_FOLDER: "/Users/YOUR_USERNAME/M8 Samples"
 
 # For Windows, comment out the above lines and uncomment these
-#SRC_FOLDER: "C:\Users\YOUR_USERNAME\Documents\Samples"
-#DEST_FOLDER: "C:\Users\YOUR_USERNAME\Documents\M8 Samples"
+#SRC_FOLDER: C:\Users\YOUR_USERNAME\Documents\Samples
+#DEST_FOLDER: C:\Users\YOUR_USERNAME\Documents\M8 Samples
 
 ### Set the path to FFMPEG
 FFMPEG_PATH: "\usr\local\bin\ffmpeg"
