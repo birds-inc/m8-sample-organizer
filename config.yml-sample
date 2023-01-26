@@ -18,7 +18,7 @@ DEST_FOLDER: "/Users/YOUR_USERNAME/M8 Samples"
 FFMPEG_PATH: "\usr\local\bin\ffmpeg"
 
 # For Windows, comment out the above lines and uncomment these
-#FFMPEG_PATH: "C:\ffmpeg\bin\ffmpeg.exe"
+#FFMPEG_PATH: C:\ffmpeg\bin\ffmpeg.exe
 
 ###
 ### PATH CLEANUP CONFIG
