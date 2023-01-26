@@ -1,6 +1,8 @@
 **[Click here to download!](https://github.com/birds-inc/m8-sample-organizer/archive/refs/heads/main.zip)**
 
-This is a Python script to organize and convert your samples for the M8 tracker.  You'll run this tool on the [command-line](https://youtu.be/I4EWvMFj37g) - instructions below!
+This is a Python script to organize and convert your samples for the M8 tracker.  You'll run this tool on the command-line - instructions below.
+
+**[Watch a video on how to use this tool](https://www.youtube.com/watch?v=VI0IuEDY8HI).**
 
 # M8 Sample Organizer
 
